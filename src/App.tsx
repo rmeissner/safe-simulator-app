@@ -52,7 +52,7 @@ function App() {
       </Box>
       {results && (<>
         <Box sx={{ paddingTop: "24px" }}>
-          <h3>Target</h3>
+          <h3>Target Safe</h3>
         </Box>
         <Box>
           {results.target}
@@ -71,6 +71,15 @@ function App() {
         <Box>
           {results.simulationResults.storageChanges.get(results.target)?.map((change) => (<>
             Slot <b>{change.slot}</b> to <b>{change.value}</b><br />
+          </>))}
+        </Box>
+        <Box sx={{ paddingTop: "8px" }}>
+          <h3>Logs</h3>
+        </Box>
+        <Box>
+          {results.simulationResults.logs.map((log) => (<>
+            Address <b>{log.address}</b><br />
+            Topic 0 <b>{log.topics[0]}</b>
           </>))}
         </Box>
       </>)}
