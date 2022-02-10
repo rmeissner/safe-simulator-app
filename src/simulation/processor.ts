@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import memdown from 'memdown'
 import Ganache from 'ganache-core'
-import Simulator, { CallElement, CallHandler, EvmConnector, ExtendedCallParams, GanacheCoreConnector, HandlerAnalyzer, MultisigTransaction, SafeInfoProvider, StepHandler, StorageHandler } from 'safe-simulator'
+import Simulator, { CallElement, CallHandler, EvmConnector, ExtendedCallParams, GanacheCoreConnector, HandlerAnalyzer, MultisigTransaction, SafeInfoProvider, StepHandler, StorageHandler } from '@rmeissner/safe-simulator'
 
 const baseOptions: any = { db_path: "/", gasLimit: 100_000_000, gasPrice: "0x0", vmErrorsOnRPCResponse: false, logging: { quiet: true, verbose: false, debug: false } }
 

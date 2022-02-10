@@ -1,5 +1,5 @@
 import axios from "axios"
-import { MultisigTransaction } from "safe-simulator"
+import { MultisigTransaction } from "@rmeissner/safe-simulator"
 import { getServiceForChainId } from "./register"
 
 export const loadTxDetails = async(chainId: string, safeTxHash: string): Promise<MultisigTransaction> => {
