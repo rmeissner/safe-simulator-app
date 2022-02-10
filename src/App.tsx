@@ -79,7 +79,7 @@ function App() {
         <Box>
           {results.simulationResults.logs.map((log) => (<>
             Address <b>{log.address}</b><br />
-            Topic 0 <b>{log.topics[0]}</b>
+            Topic 0 <b>{log.topics[0]}</b><br />
           </>))}
         </Box>
       </>)}
