@@ -33,15 +33,9 @@ const SimulationResults: React.FC<Props> = ({ results }) => {
     }
 
     return (<>
-        <Box sx={{ paddingTop: "24px" }}>
-            <h3>Target Safe</h3>
-        </Box>
-        <Box>
-            {results.safeAddress}
-        </Box>
-        <Box sx={{ paddingTop: "24px" }}>
+        <Box sx={{ paddingTop: "8px" }}>
             <h3>Status:</h3>
-            {results.success ? (<Typography>Success</Typography>) : (<Typography sx={{color: "red"}}>Failure</Typography>)}
+            {results.success ? (<Typography sx={{ color: "green" }}>Success</Typography>) : (<Typography sx={{ color: "red" }}>Failure</Typography>)}
         </Box>
         {targetCalls && (<>
             <Box sx={{ paddingTop: "8px" }}>
@@ -49,42 +43,48 @@ const SimulationResults: React.FC<Props> = ({ results }) => {
             </Box>
             <Calls calls={targetCalls} />
         </>)}
-        {otherCalls.length > 0 && (<>
-            <Box sx={{ paddingTop: "8px" }}>
-                <h3>Calls from other contracts</h3>
-            </Box>
-            {otherCalls.map((e) => <Accordion>
-                <AccordionSummary>{e.target}</AccordionSummary>
-                <AccordionDetails>
-                    <Calls calls={e.calls} />
-                </AccordionDetails>
-            </Accordion>)}
-        </>)}
         {targetChanges && (<>
             <Box sx={{ paddingTop: "8px" }}>
                 <h3>Storage Changes on target Safe</h3>
             </Box>
             <StorageChanges changes={targetChanges} />
         </>)}
-        {otherChanges.length > 0 && (<>
-            <Box sx={{ paddingTop: "8px" }}>
-                <h3>Storage Changes on other contracts</h3>
-            </Box>
-            {otherChanges.map((e) => <Accordion>
-                <AccordionSummary>{e.target}</AccordionSummary>
-                <AccordionDetails>
-                    <StorageChanges changes={e.changes} decode={false} />
-                </AccordionDetails>
-            </Accordion>)}
-        </>)}
         <Box sx={{ paddingTop: "8px" }}>
             <h3>Logs</h3>
         </Box>
         <Logs logs={results.logs} />
-        <Box sx={{ paddingTop: "8px" }}>
-            <h3>Call Tree</h3>
-        </Box>
-        <CallTree tree={results.callTree} />
+        <h3>Advanced Information</h3>
+        <Accordion>
+            <AccordionSummary>Click to show</AccordionSummary>
+            <AccordionDetails>
+                {otherCalls.length > 0 && (<>
+                    <Box sx={{ paddingTop: "8px" }}>
+                        <h3>Calls from other contracts</h3>
+                    </Box>
+                    {otherCalls.map((e) => <Accordion>
+                        <AccordionSummary>{e.target}</AccordionSummary>
+                        <AccordionDetails>
+                            <Calls calls={e.calls} />
+                        </AccordionDetails>
+                    </Accordion>)}
+                </>)}
+                <Box sx={{ paddingTop: "8px" }}>
+                    <h3>Call Tree</h3>
+                </Box>
+                <CallTree tree={results.callTree} />
+                {otherChanges.length > 0 && (<>
+                    <Box sx={{ paddingTop: "8px" }}>
+                        <h3>Storage Changes on other contracts</h3>
+                    </Box>
+                    {otherChanges.map((e) => <Accordion>
+                        <AccordionSummary>{e.target}</AccordionSummary>
+                        <AccordionDetails>
+                            <StorageChanges changes={e.changes} decode={false} />
+                        </AccordionDetails>
+                    </Accordion>)}
+                </>)}
+            </AccordionDetails>
+        </Accordion>
     </>)
 }
 
