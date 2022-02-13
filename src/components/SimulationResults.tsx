@@ -4,6 +4,7 @@ import Logs from './results/Logs'
 import Calls from './results/Calls'
 import StorageChanges from './results/StorageChanges'
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material"
+import CallTree from "./results/CallTree"
 
 export interface Props {
     results: SimulationResult
@@ -80,6 +81,10 @@ const SimulationResults: React.FC<Props> = ({ results }) => {
             <h3>Logs</h3>
         </Box>
         <Logs logs={results.logs} />
+        <Box sx={{ paddingTop: "8px" }}>
+            <h3>Call Tree</h3>
+        </Box>
+        <CallTree tree={results.callTree} />
     </>)
 }
 
