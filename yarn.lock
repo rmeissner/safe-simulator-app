@@ -2000,10 +2000,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.2.tgz#830beaec4b4091a9e9398ac50f865ddea52186b9"
   integrity sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA==
 
-"@rmeissner/safe-simulator@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@rmeissner/safe-simulator/-/safe-simulator-0.2.1.tgz#d2ed4eba87992b70a3f6877d84c986a5c2d00bef"
-  integrity sha512-ExippA61IG5WRC0qPE1Z6waU1q5RoMqwuR58l5XIlu8TvV9TK+0dk5gKBTHhl1+yzRWyiNwmpjzG/vvhMJds+g==
+"@rmeissner/safe-simulator@^0.5.3":
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/@rmeissner/safe-simulator/-/safe-simulator-0.5.3.tgz#3a5011dc443aec69cb2d3b7796a7f6599297ff28"
+  integrity sha512-hhCNTjyka2/cBZhg7XRymq/WuztPPyp71j8VqPffYgtMIfcl21FYFrbxWm05OnjVp2AuWgHDjYpB5tO6WoEJdg==
 
 "@rollup/plugin-node-resolve@^7.1.1":
   version "7.1.3"

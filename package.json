@@ -10,7 +10,7 @@
     "@gnosis.pm/safe-apps-sdk": "^6.3.0",
     "@gnosis.pm/safe-deployments": "^1.8.0",
     "@mui/material": "^5.4.1",
-    "@rmeissner/safe-simulator": "^0.2.1",
+    "@rmeissner/safe-simulator": "^0.5.3",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",

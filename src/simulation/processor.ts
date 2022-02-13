@@ -1,7 +1,8 @@
 import { ethers } from 'ethers'
 import memdown from 'memdown'
 import Ganache from 'ganache-core'
-import Simulator, { CallElement, CallHandler, EvmConnector, ExtendedCallParams, GanacheCoreConnector, HandlerAnalyzer, MultisigTransaction, SafeInfoProvider, StepHandler, StorageHandler } from '@rmeissner/safe-simulator'
+import Simulator, { CallElement, CallHandler, EvmConnector, ExtendedCallParams, GanacheCoreConnector, HandlerAnalyzer, MultisigTransaction, SafeInfo, SafeInfoProvider, StepHandler, StorageHandler } from '@rmeissner/safe-simulator'
+import { circularProgressClasses } from '@mui/material'
 
 const baseOptions: any = { db_path: "/", gasLimit: 100_000_000, gasPrice: "0x0", vmErrorsOnRPCResponse: false, logging: { quiet: true, verbose: false, debug: false } }
 
@@ -44,10 +45,13 @@ export interface SimulationResult {
     logs: ethers.providers.Log[],
     callTree: CallElement[],
     calls: Map<string, ExtendedCallParams[]>,
-    storageChanges: Map<string, any[]>
+    storageChanges: Map<string, any[]>,
+    safeAddress: string,
+    safeInfo: SafeInfo
 }
 
 export const simulateTx = async (network: ethers.providers.ExternalProvider, safeTx: MultisigTransaction, simulationEnv?: SimulationEnv) => {
+    console.log({safeTx})
     const holder: SimulationEnv = simulationEnv || buildSimulationEnv(network)
     const provider = new ethers.providers.Web3Provider(holder.connector as any)
     const infoProvider = new SafeInfoProvider(provider)
@@ -61,6 +65,8 @@ export const simulateTx = async (network: ethers.providers.ExternalProvider, saf
         logs: txReceipt.logs,
         callTree: callHandler.roots,
         calls: callHandler.calls,
-        storageChanges: storageHandler.storageChanges
+        storageChanges: storageHandler.storageChanges,
+        safeAddress: safeTx.safe,
+        safeInfo
     }
 }
