@@ -1,6 +1,6 @@
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material"
 import { Box } from "@mui/system"
-import { decodeLog, loadEventSignatures } from "@rmeissner/safe-simulator"
+import { decodeLog, EventDecodingResult, loadEventSignatures } from "@rmeissner/safe-simulator"
 import { ethers } from "ethers"
 import { useEffect, useState } from "react"
 
@@ -14,12 +14,20 @@ interface DisplayLog {
     params?: string[]
 }
 
+const decodeEvent = async (log: ethers.providers.Log): Promise<EventDecodingResult[]> => {
+    try {
+        return await decodeLog(log, loadEventSignatures)
+    } catch (e) {
+        return []
+    }
+}
+
 const Logs: React.FC<Props> = ({ logs }) => {
     const [displayLogs, setDisplayLogs] = useState<DisplayLog[]>([])
     useEffect(() => {
         (async () => {
             const results = await Promise.all(logs.map(async (log) => {
-                const decoded = await decodeLog(log, loadEventSignatures)
+                const decoded = await decodeEvent(log)
                 if (decoded.length === 0) {
                     return {
                         address: log.address,

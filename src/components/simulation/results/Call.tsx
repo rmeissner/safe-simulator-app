@@ -1,5 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material"
-import { decodeFunctionData, ExtendedCallParams, loadFunctionSignatures } from "@rmeissner/safe-simulator"
+import { decodeFunctionData, ExtendedCallParams, FunctionDecodingResult, loadFunctionSignatures } from "@rmeissner/safe-simulator"
 import { ethers } from "ethers"
 import { useEffect, useState } from "react"
 
@@ -25,12 +25,20 @@ const decodeReturnData = async (data: string): Promise<string | undefined> => {
     }
 }
 
+const decodeData = async (data: string): Promise<FunctionDecodingResult[]> => {
+    try {
+        return await decodeFunctionData(data, loadFunctionSignatures)
+    } catch (e) {
+        return []
+    }
+}
+
 const Call: React.FC<Props> = ({ label, call, children }) => {
     const [displayCall, setDisplayCall] = useState<DisplayCall | undefined>(undefined)
     useEffect(() => {
         try {
             (async () => {
-                const decoded = await decodeFunctionData(call.data, loadFunctionSignatures)
+                const decoded = await decodeData(call.data)
                 if (decoded.length === 0) {
                     return {
                         description: call.data.slice(0, 10),

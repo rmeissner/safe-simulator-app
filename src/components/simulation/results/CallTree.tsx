@@ -1,8 +1,5 @@
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material"
 import { Box } from "@mui/system"
-import { CallElement, decodeFunctionData, ExtendedCallParams, loadFunctionSignatures } from "@rmeissner/safe-simulator"
-import { ethers } from "ethers"
-import { useEffect, useState } from "react"
+import { CallElement, ExtendedCallParams } from "@rmeissner/safe-simulator"
 import Call from "./Call"
 
 export interface Props {
