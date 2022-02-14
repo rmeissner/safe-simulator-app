@@ -4,9 +4,9 @@ import { simulateTx, SimulationResult } from '../../logic/simulation/processor';
 import { loadTxDetails } from '../../logic/service/details';
 import { getChainId as safeAppsChainId, safeAppsProvider } from '../../logic/sapp/safeAppsSDK';
 import SimulationResults from './SimulationResults'
-import { MultisigTransaction } from '@rmeissner/safe-simulator';
 import MultisigTx from '../MultisigTransaction';
 import { CircularProgress } from '@mui/material';
+import { ServiceMultisigTransaction } from '../../logic/service/types';
 
 export interface Props {
     safeTxHash: string,
@@ -20,7 +20,7 @@ interface Results {
 
 const Simulation: React.FC<Props> = ({ safeTxHash, connectedToSafe }) => {
     const [simulationProgress, setSimulationProgress] = useState(false)
-    const [safeTx, setSafeTx] = useState<MultisigTransaction | undefined>(undefined)
+    const [safeTx, setSafeTx] = useState<ServiceMultisigTransaction | undefined>(undefined)
     const [results, setResults] = useState<Results | undefined>(undefined)
     const onSimulateTx = useCallback(async (safeTxHash: string) => {
         try {

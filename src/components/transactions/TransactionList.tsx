@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { loadMultisigTxs } from '../../logic/service/list';
 import { getChainId as safeAppsChainId } from '../../logic/sapp/safeAppsSDK';
 import { getChainId as injectedChainId } from '../../logic/injected/ethereum';
-import { MultisigTransaction } from '@rmeissner/safe-simulator';
 import { Box, Button, CircularProgress } from '@mui/material';
 import { ethers } from 'ethers';
 import MultisigTx from '../MultisigTransaction';
 import { useNavigate } from 'react-router-dom';
+import { ServiceMultisigTransaction } from '../../logic/service/types';
 
 export interface Props {
     connectedToSafe: boolean
@@ -17,8 +17,8 @@ const TransactionList: React.FC<Props> = ({ safe, connectedToSafe }) => {
     const navigate = useNavigate()
     const [moreUrl, setMoreUrl] = useState<string | null>(null)
     const [loading, setLoading] = useState<boolean>(false)
-    const [multisigTxs, setMultisigTxs] = useState<MultisigTransaction[]>([])
-    const loadMultisigTransactions = useCallback(async (safe: string, moreUrl?: string, txs?: MultisigTransaction[]) => {
+    const [multisigTxs, setMultisigTxs] = useState<ServiceMultisigTransaction[]>([])
+    const loadMultisigTransactions = useCallback(async (safe: string, moreUrl?: string, txs?: ServiceMultisigTransaction[]) => {
         setLoading(true)
         try {
             if (!txs) setMultisigTxs([])
@@ -40,7 +40,7 @@ const TransactionList: React.FC<Props> = ({ safe, connectedToSafe }) => {
         loadMultisigTransactions(safe)
     }, [safe, loadMultisigTransactions])
     return (<Box>
-        { multisigTxs.map((txs) => <MultisigTx details={txs} onSelected={(safeTxHash) => navigate("/" + safeTxHash) } />) }
+        { multisigTxs.map((tx) => <MultisigTx details={tx} onSelected={(safeTxHash) => navigate("/" + safeTxHash) } />) }
         { !loading && moreUrl && <Button variant='text' onClick={() => loadMultisigTransactions(safe, moreUrl, multisigTxs)}>Load more</Button>}
         { loading && <CircularProgress  sx={{ marginTop: "24px" }} />}
     </Box>)
