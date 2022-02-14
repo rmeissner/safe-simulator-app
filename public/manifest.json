@@ -1,6 +1,8 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Safe Simulator",
+  "name": "Safe Simulator",
+  "description": "An App to simulate Safe transactions against a network fork",
+  "iconPath": "logo.svg",
   "icons": [
     {
       "src": "favicon.ico",
