@@ -1,5 +1,5 @@
 import { Box } from "@mui/system"
-import { SimulationResult } from "../simulation/processor"
+import { SimulationResult } from "../../logic/simulation/processor"
 import Logs from './results/Logs'
 import Calls from './results/Calls'
 import StorageChanges from './results/StorageChanges'

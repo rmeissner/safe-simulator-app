@@ -1,11 +1,11 @@
-import { eip1193Provider, getChainId as injectedChainId } from '../injected/ethereum';
+import { eip1193Provider, getChainId as injectedChainId } from '../../logic/injected/ethereum';
 import { useCallback, useEffect, useState } from 'react';
-import { simulateTx, SimulationResult } from '../simulation/processor';
-import { loadTxDetails } from '../service/txDetails';
-import { getChainId as safeAppsChainId, safeAppsProvider } from '../sapp/safeAppsSDK';
+import { simulateTx, SimulationResult } from '../../logic/simulation/processor';
+import { loadTxDetails } from '../../logic/service/details';
+import { getChainId as safeAppsChainId, safeAppsProvider } from '../../logic/sapp/safeAppsSDK';
 import SimulationResults from './SimulationResults'
 import { MultisigTransaction } from '@rmeissner/safe-simulator';
-import MultisigTx from './MultisigTransaction';
+import MultisigTx from '../MultisigTransaction';
 import { CircularProgress } from '@mui/material';
 
 export interface Props {
