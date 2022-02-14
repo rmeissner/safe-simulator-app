@@ -33,6 +33,11 @@ const decodeData = async (data: string): Promise<FunctionDecodingResult[]> => {
     }
 }
 
+const buildDescription = (label: string, value: string): string => {
+    const ether = ethers.utils.formatEther(value)
+    return ether === "0.0" ? label : `${label} - ${ether}`
+}
+
 const Call: React.FC<Props> = ({ label, call, children }) => {
     const [displayCall, setDisplayCall] = useState<DisplayCall | undefined>(undefined)
     useEffect(() => {
@@ -40,20 +45,22 @@ const Call: React.FC<Props> = ({ label, call, children }) => {
             (async () => {
                 const decoded = await decodeData(call.data)
                 if (decoded.length === 0) {
-                    return {
-                        description: call.data.slice(0, 10),
+                    const displayCall = {
+                        description: buildDescription(call.data.slice(0, 10), call.value),
                         details: call
                     }
+                    setDisplayCall(displayCall)
+                } else {
+                    const primary = decoded[0]
+                    const returnData = call.returnData ? await decodeReturnData(call.returnData) : undefined
+                    const displayCall = {
+                        description: buildDescription(primary.signature, call.value),
+                        details: call,
+                        returnData,
+                        params: primary.decoded.map((p) => p.toString())
+                    }
+                    setDisplayCall(displayCall)
                 }
-                const primary = decoded[0]
-                const returnData = call.returnData ? await decodeReturnData(call.returnData) : undefined
-                const displayCall = {
-                    description: primary.signature,
-                    details: call,
-                    returnData,
-                    params: primary.decoded.map((p) => p.toString())
-                }
-                setDisplayCall(displayCall)
             })()
         } catch (e) {
             console.error(e)
