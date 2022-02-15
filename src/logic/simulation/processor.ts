@@ -11,10 +11,11 @@ if (Error.captureStackTrace === undefined) {
 
 const baseOptions: any = { db_path: "/", gasLimit: 100_000_000, gasPrice: "0x0", vmErrorsOnRPCResponse: false, logging: { quiet: true, verbose: false, debug: false } }
 
-const buildSimulationEnv = (provider: any): SimulationEnv => {
+const buildSimulationEnv = (provider: any, targetBlock: string | number): SimulationEnv => {
     const options = baseOptions
     options.db = memdown()
     options.fork = provider
+    options.fork_block_number = targetBlock
     const network = Ganache.provider(options)
     const connector = new GanacheCoreConnector(network)
     const simulator = new Simulator(connector)
@@ -55,8 +56,8 @@ export interface SimulationResult {
     safeInfo: SafeInfo
 }
 
-export const simulateTx = async (network: ethers.providers.ExternalProvider, safeTx: MultisigTransaction, simulationEnv?: SimulationEnv) => {
-    const holder: SimulationEnv = simulationEnv || buildSimulationEnv(network)
+export const simulateTx = async (network: ethers.providers.ExternalProvider, safeTx: MultisigTransaction, targetBlock: string | number, simulationEnv?: SimulationEnv) => {
+    const holder: SimulationEnv = simulationEnv || buildSimulationEnv(network, targetBlock)
     const provider = new ethers.providers.Web3Provider(holder.connector as any)
     const infoProvider = new SafeInfoProvider(provider)
     const safeInfo = await infoProvider.loadInfo(safeTx.safe)

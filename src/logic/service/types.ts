@@ -6,5 +6,6 @@ export interface Page<T> {
 }
 
 export interface ServiceMultisigTransaction extends MultisigTransaction {
-    isExecuted: boolean
+    isExecuted: boolean,
+    transactionHash: string
 }

@@ -5,8 +5,9 @@ import { loadTxDetails } from '../../logic/service/details';
 import { getChainId as safeAppsChainId, safeAppsProvider } from '../../logic/sapp/safeAppsSDK';
 import SimulationResults from './SimulationResults'
 import MultisigTx from '../MultisigTransaction';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Switch } from '@mui/material';
 import { ServiceMultisigTransaction } from '../../logic/service/types';
+import { ethers } from 'ethers';
 
 export interface Props {
     safeTxHash: string,
@@ -19,10 +20,11 @@ interface Results {
 }
 
 const Simulation: React.FC<Props> = ({ safeTxHash, connectedToSafe }) => {
+    const [runExecutionOnOriginalBlock, setRunExecutionOnOriginalBlock] = useState(true)
     const [simulationProgress, setSimulationProgress] = useState(false)
     const [safeTx, setSafeTx] = useState<ServiceMultisigTransaction | undefined>(undefined)
     const [results, setResults] = useState<Results | undefined>(undefined)
-    const onSimulateTx = useCallback(async (safeTxHash: string) => {
+    const onSimulateTx = useCallback(async (safeTxHash: string, useLatestBlock: boolean) => {
         try {
             setSimulationProgress(true)
             setResults(undefined)
@@ -31,7 +33,21 @@ const Simulation: React.FC<Props> = ({ safeTxHash, connectedToSafe }) => {
             const provider = connectedToSafe ? safeAppsProvider(chainId.toString()) : eip1193Provider()
             const safeTx = await loadTxDetails(chainId.toString(), safeTxHash)
             setSafeTx(safeTx)
-            const simulationResults = await simulateTx(provider, safeTx)
+            let targetBlock: string | number = "latest"
+            if (!useLatestBlock) {
+                const executionTransactionHash = safeTx.transactionHash
+                const ethersProvider = new ethers.providers.Web3Provider(provider)
+                const executionTx = await ethersProvider.getTransaction(executionTransactionHash)
+                try {
+                    const preExecutionBlock = executionTx.blockNumber!! - 1
+                    await ethersProvider.getStorageAt(safeTx.safe, 0, preExecutionBlock)
+                    targetBlock = preExecutionBlock
+                } catch {
+                    console.log("Cannot access archive state")
+                    setRunExecutionOnOriginalBlock(false)
+                }
+            }
+            const simulationResults = await simulateTx(provider, safeTx, targetBlock)
             setResults({
                 target: safeTx.safe,
                 simulationResults
@@ -41,11 +57,18 @@ const Simulation: React.FC<Props> = ({ safeTxHash, connectedToSafe }) => {
         } finally {
             setSimulationProgress(false)
         }
-    }, [connectedToSafe, results, setResults, setSimulationProgress, setSafeTx])
+    }, [connectedToSafe, setResults, setSimulationProgress, setSafeTx])
+
+    const handleBlockTargetChange = (useExecutionBlock: boolean) => {
+        setRunExecutionOnOriginalBlock(useExecutionBlock)
+    }
+
     useEffect(() => {
-        onSimulateTx(safeTxHash)
-    }, [safeTxHash])
+        if (simulationProgress) return
+        onSimulateTx(safeTxHash, !runExecutionOnOriginalBlock)
+    }, [safeTxHash, runExecutionOnOriginalBlock])
     return (<>
+        <Switch checked={runExecutionOnOriginalBlock} onChange={(e) => handleBlockTargetChange(e.target.checked)} disabled={simulationProgress} />Use block of execution time<br />
         {safeTx && (<>
             <h3>Safe</h3>
             {safeTx?.safe}
