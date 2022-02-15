@@ -2,7 +2,12 @@ import { ethers } from 'ethers'
 import memdown from 'memdown'
 import Ganache from 'ganache-core'
 import Simulator, { CallElement, CallHandler, EvmConnector, ExtendedCallParams, GanacheCoreConnector, HandlerAnalyzer, MultisigTransaction, SafeInfo, SafeInfoProvider, StepHandler, StorageHandler } from '@rmeissner/safe-simulator'
-import { circularProgressClasses } from '@mui/material'
+
+// Because FIREFOX and IE suck
+if (Error.captureStackTrace === undefined) {
+    console.log("Fix captureStackTrace")
+    Error.captureStackTrace = function () {}
+}
 
 const baseOptions: any = { db_path: "/", gasLimit: 100_000_000, gasPrice: "0x0", vmErrorsOnRPCResponse: false, logging: { quiet: true, verbose: false, debug: false } }
 
@@ -51,7 +56,6 @@ export interface SimulationResult {
 }
 
 export const simulateTx = async (network: ethers.providers.ExternalProvider, safeTx: MultisigTransaction, simulationEnv?: SimulationEnv) => {
-    console.log({safeTx})
     const holder: SimulationEnv = simulationEnv || buildSimulationEnv(network)
     const provider = new ethers.providers.Web3Provider(holder.connector as any)
     const infoProvider = new SafeInfoProvider(provider)
